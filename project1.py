@@ -9,7 +9,7 @@ import csv
 
 def read_csv(filename):
     data = []
-    with open(filename, 'r') as file:
+    with open(filename, 'r', encoding= 'utf-8') as file:
         reader = csv.DictReader(file)
         for row in reader:
             data.append(row)
@@ -20,9 +20,13 @@ def calc_average_yield_per_crop(data):
     counts = {}
     for row in data:
         crop = row['Crop']
-        yield_value = float(row['Yield_hg_per_ha'])
+        try:
+            yield_value = float(row['Yield_hg_per_ha'])
+        except:
+            continue
         totals[crop] = totals.get(crop, 0) + yield_value
         counts[crop] = counts.get(crop, 0) + 1
+
     averages = {}
     for crop in totals:
         averages[crop] = totals[crop] / counts[crop]
@@ -33,9 +37,13 @@ def calc_highest_yield_crop_per_country(data):
     for row in data:
         country = row['Country']
         crop = row['Crop']
-        yield_value = float(row['Yield_hg_per_ha'])
+        try:
+            yield_value = float(row['Yield_hg_per_ha'])
+        except:
+            continue
         if country not in highest or yield_value > highest[country][1]:
             highest[country] = (crop, yield_value)
+
     result ={}
     for country in highest:
         result[country] = highest[country][0]
