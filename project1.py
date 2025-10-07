@@ -61,5 +61,23 @@ def calc_total_area_harvested_by_year(data):
         totals[year] = totals.get(year, 0.0) + area_value
     return totals
 
+def calc_average_rainfall_per_country(data):
+    totals = {}
+    counts = {}
+    rain_col = 'Average_rainfall_mm_per_year'
+    for row in data:
+        country = row['Country']
+        try:
+            rainfall_value = float(row.get(rain_col, ''))
+        except:
+            continue
+        totals[country] = totals.get(country, 0.0) + rainfall_value
+        counts[country] = counts.get(country, 0) + 1
+    
+    averages = {}
+    for country in totals:
+        averages[country] = totals[country] / counts[country]
+    return averages
+
 if __name__ == "__main__":
     pass
