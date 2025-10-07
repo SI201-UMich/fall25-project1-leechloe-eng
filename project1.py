@@ -48,3 +48,15 @@ def calc_highest_yield_crop_per_country(data):
     for country in highest:
         result[country] = highest[country][0]
     return result
+
+def calc_total_area_harvested_by_year(data):
+    totals = {}
+    area_col = 'Area_harvested'
+    for row in data:
+        year = row['Year']
+        try:
+            area_value = float(row.get(area_col, ''))
+        except:
+            continue
+        totals[year] = totals.get(year, 0.0) + area_value
+    return totals
