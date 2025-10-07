@@ -27,3 +27,16 @@ def calc_average_yield_per_crop(data):
     for crop in totals:
         averages[crop] = totals[crop] / counts[crop]
     return averages
+
+def calc_highest_yield_crop_per_country(data):
+    highest = {}
+    for row in data:
+        country = row['Country']
+        crop = row['Crop']
+        yield_value = float(row['Yield_hg_per_ha'])
+        if country not in highest or yield_value > highest[country][1]:
+            highest[country] = (crop, yield_value)
+    result ={}
+    for country in highest:
+        result[country] = highest[country][0]
+    return result
