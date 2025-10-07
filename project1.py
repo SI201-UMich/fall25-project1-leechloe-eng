@@ -60,3 +60,6 @@ def calc_total_area_harvested_by_year(data):
             continue
         totals[year] = totals.get(year, 0.0) + area_value
     return totals
+
+if __name__ == "__main__":
+    pass
