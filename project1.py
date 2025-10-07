@@ -21,7 +21,7 @@ def calc_average_yield_per_crop(data):
     for row in data:
         crop = row['Crop']
         try:
-            yield_value = float(row['Yield_hg_per_ha'])
+            yield_value = float(row['Yield_tons_per_hectare'])
         except:
             continue
         totals[crop] = totals.get(crop, 0) + yield_value
@@ -32,17 +32,17 @@ def calc_average_yield_per_crop(data):
         averages[crop] = totals[crop] / counts[crop]
     return averages
 
-def calc_highest_yield_crop_per_country(data):
+def calc_highest_yield_crop_per_region(data):
     highest = {}
     for row in data:
-        country = row['Country']
+        region = row['Region']
         crop = row['Crop']
         try:
-            yield_value = float(row['Yield_hg_per_ha'])
+            yield_value = float(row['Yield_tons_per_hectare'])
         except:
             continue
-        if country not in highest or yield_value > highest[country][1]:
-            highest[country] = (crop, yield_value)
+        if region not in highest or yield_value > highest[region][1]:
+            highest[region] = (crop, yield_value)
 
     result ={}
     for country in highest:
@@ -64,7 +64,7 @@ def calc_total_area_harvested_by_year(data):
 def calc_average_rainfall_per_country(data):
     totals = {}
     counts = {}
-    rain_col = 'Average_rainfall_mm_per_year'
+    rain_col = 'Rainfall_mm'
     for row in data:
         country = row['Country']
         try:
@@ -77,6 +77,24 @@ def calc_average_rainfall_per_country(data):
     averages = {}
     for country in totals:
         averages[country] = totals[country] / counts[country]
+    return averages
+
+def calc_average_fertilizer_per_crop(data):
+    totals = {}
+    counts = {}
+    fert_col = 'Fertilizer_Used'
+    for row in data:
+        crop = row['Crop']
+        try:
+            fertilizer_value = float(row.get(fert_col, ''))
+        except:
+            continue
+        totals[crop] = totals.get(crop, 0.0) + fertilizer_value
+        counts[crop] = counts.get(crop, 0) + 1
+    
+    averages = {}
+    for crop in totals:
+        averages[crop] = totals[crop] / counts[crop]
     return averages
 
 if __name__ == "__main__":
