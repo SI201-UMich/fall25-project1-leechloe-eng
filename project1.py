@@ -3,7 +3,7 @@
 # Email: leechloe@umich.edu
 # Collaborators: Zachary Landau and Norah Smith
 # AI tools used: ChatGPT for guidance on code structure
-# Functions created: read_csv, calc_average_yield_per_crop
+# Functions created: read_csv, calc_average_yield_per_crop, calc_highest_yield_crop_per_region, calc_average_temp_per_region, calc_total_area_harvested_by_year, calc_average_rainfall_per_region, calc_average_fertilizer_per_crop
 
 import csv
 
@@ -49,6 +49,18 @@ def calc_highest_yield_crop_per_region(data):
         result[country] = highest[country][0]
     return result
 
+def calc_average_temp_per_region(data):
+    totals = {}
+    counts = {}
+    for row in data:
+        region = row['Region']
+        try:
+            temp_value = float(row['Avg_temp'])
+        except:
+            continue
+        totals[region] = totals.get(region, 0.0) + temp_value
+        counts[region] = counts.get(region, 0) + 1
+
 def calc_total_area_harvested_by_year(data):
     totals = {}
     area_col = 'Area_harvested'
@@ -61,22 +73,22 @@ def calc_total_area_harvested_by_year(data):
         totals[year] = totals.get(year, 0.0) + area_value
     return totals
 
-def calc_average_rainfall_per_country(data):
+def calc_average_rainfall_per_region(data):
     totals = {}
     counts = {}
     rain_col = 'Rainfall_mm'
     for row in data:
-        country = row['Country']
+        region = row['Region']
         try:
             rainfall_value = float(row.get(rain_col, ''))
         except:
             continue
-        totals[country] = totals.get(country, 0.0) + rainfall_value
-        counts[country] = counts.get(country, 0) + 1
+        totals[region] = totals.get(region, 0.0) + rainfall_value
+        counts[region] = counts.get(region, 0) + 1
     
     averages = {}
-    for country in totals:
-        averages[country] = totals[country] / counts[country]
+    for region in totals:
+        averages[region] = totals[region] / counts[region]
     return averages
 
 def calc_average_fertilizer_per_crop(data):
